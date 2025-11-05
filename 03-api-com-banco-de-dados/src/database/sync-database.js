@@ -13,8 +13,19 @@ async function syncDatabase() {
             is_active      BOOLEAN DEFAULT TRUE
         );`
     )
+
+    await query(`
+        CREATE TABLE IF NOT EXISTS costumers (
+            id             SERIAL PRIMARY KEY,
+            name           VARCHAR(255) NOT NULL,
+            email          VARCHAR(255) NOT NULL UNIQUE,
+            created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );`
+    )
     
     console.log('Created "products" table.')
+    console.log('Created "costumers" table.')
     process.exit(1)
 }
 
