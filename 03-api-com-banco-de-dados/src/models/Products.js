@@ -47,7 +47,6 @@ class Product {
         Object.assign( product, attributes )
         product.updatedAt = new Date()
 
-
         await query(`
             UPDATE products SET
             name = $1,
@@ -67,8 +66,11 @@ class Product {
     }
 
     static async delete(id) {
-        await query(`DELETE FROM products WHERE id = $1;`, [id])
-        return { message: 'Product deleted sucessfully.' }
+        const { rows } = await query(`SELECT * FROM products WHERE id = $1;`, [id])
+        if (!rows[0]) return { message: 'Product not found.' }
+        
+        await query(`DELETE FROM products WHERE id = $1 RETURNING *;`, [id])
+        return rows
     }
 }
 
