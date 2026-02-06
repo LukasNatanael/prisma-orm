@@ -1,14 +1,15 @@
 const { query } = require('./pool')
 
-async function createEvent(  name, event_date, total_tickets=0, selled_tickets=0) {
+async function createEvent(  name, eventDate, totalTickets=0) {
     
-    if ( typeof total_tickets === 'number' && total_tickets > 0 ) {
+    if ( typeof totalTickets === 'number' && totalTickets > 0 ) {
         const rows = await query(`
             INSERT INTO events
-            ( name, event_date, total_tickets, selled_tickets )
-            VALUES ( $1, $2, $3, $4 );
-            `, [ name, event_date, total_tickets, selled_tickets ])
-            
+            ( name, event_date, total_tickets )
+            VALUES ( $1, $2, $3 );
+            `, [ name, eventDate, totalTickets ])
+
+        console.log('Event created successfully!')
         return rows
     }
     else {
