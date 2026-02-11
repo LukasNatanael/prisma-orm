@@ -1,4 +1,4 @@
-const query = require(".");
+const { query } = require(".");
 
 async function syncDatabase() {
     await query(`

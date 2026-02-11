@@ -1,4 +1,4 @@
-const query = require("../database")
+const { query } = require("../database")
 
 class Customer {
     constructor(costumer_row) {

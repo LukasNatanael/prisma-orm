@@ -1,4 +1,4 @@
-const query = require("../database")
+const { query } = require("../database")
 
 class Product {
     constructor (productRow) {
@@ -7,7 +7,7 @@ class Product {
         this.description   = productRow.description
         this.price         = +productRow.price
         this.stockQuantity = productRow.stock_quantity
-        this.isActive      = productRow.is_active
+        this.isActive      = productRow.is_active == null ? true: productRow.is_active 
         this.createdAt     = new Date(productRow.created_at)
         this.updatedAt     = new Date(productRow.updated_at)
     }
