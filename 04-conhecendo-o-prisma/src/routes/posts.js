@@ -4,10 +4,33 @@ const prisma = require('../database')
 const router = Router()
 
 router.get('/', async (req, res) => {
+  const page     = Number(req.params.page)     || 1
+  const pageSize = Number(req.params.pageSize) || 10
+
+  const skip = (page - 1) * pageSize
+  const take = pageSize
+
   const posts = await prisma.post.findMany({
-    orderBy: { createdAt: 'desc' }
+    where:   { published: true },
+    orderBy: { createdAt: 'desc' },
+    take,
+    skip,
   })
-  res.json(posts)
+
+  const publishedPosts   = await prisma.post.count({ where: { published: true } })
+  const unpublishedPosts = await prisma.post.count({ where: { published: false } })
+  const totalPages = Math.ceil(publishedPosts / pageSize)
+
+  res.json({
+    posts,
+    pagination: {
+      page,
+      pageSize,
+      totalPages,
+      publishedPosts,
+      unpublishedPosts
+    }
+  })
 })
 
 router.get('/search', async (req, res) => {
