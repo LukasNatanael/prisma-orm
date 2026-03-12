@@ -82,7 +82,8 @@ router.post('/', async (req, res) => {
       title,
       slug,
       content,
-      authorId
+      authorId,
+      tags: { connect: req.body.tags }
     },
   })
   res.status(201).json(post)
@@ -92,7 +93,7 @@ router.get('/:id', async (req, res) => {
   const { id } = req.params
   const posts = await prisma.post.findUnique({
     where: { id: Number(id) },
-    include: { author: true },
+    include: { author: true, tags: true },
   })
   res.json(posts)
 })
@@ -101,7 +102,7 @@ router.put('/:id', async (req, res) => {
   const { id } = req.params
   const { title, slug, content, published } = req.body
   const post = await prisma.post.update({
-    data: { title, slug, content, published },
+    data: { title, slug, content, published, tags: { set: req.body.tags } },
     where: { id: Number(id) }
   })
   res.json(post)
