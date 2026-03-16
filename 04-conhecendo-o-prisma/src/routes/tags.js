@@ -20,7 +20,9 @@ router.get('/:id', async (req, res) => {
   const { id } = req.params
   const tags = await prisma.tag.findUnique({
     where: { id: Number(id) },
-    include: { posts: true }
+    include: { posts: {
+      include: { author: { select: { name: true} } }
+    } }
     
   })
   res.json(tags)
